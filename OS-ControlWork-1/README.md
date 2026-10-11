@@ -52,45 +52,69 @@
 <img width="1992" height="732" alt="image" src="https://github.com/user-attachments/assets/0a6550e8-75e3-424d-bdaa-925a4585ac39" />
 
 
-## 4. Псевдоніми
+## 4. Створення та перевірка псевдонімів
 
-Файл: [Sklad_aliases.sh](Sklad_aliases.sh). Завантажити його в поточну Bash-оболонку командою `source ./Sklad_aliases.sh`. Запуск через `bash Sklad_aliases.sh` не додає псевдоніми до батьківської оболонки.
+У файлі `Sklad_aliases.sh` я записала псевдоніми для шести Bash-команд. Вони дозволяють використовувати назви дій зі складської логістики замість стандартних команд.
+
+Наприклад, `zmontuvaty stelazh_1` створює каталог `stelazh_1`, який у цій роботі позначає стелаж.
 
 | Дія | Псевдонім |
 | --- | --- |
-| підійти до стелажа | `alias pidiity='cd'` |
-| змонтувати стелаж | `alias zmontuvaty='mkdir'` |
-| зареєструвати коробку | `alias zareiestruvaty='touch'` |
-| інспектувати стелаж | `alias inspektuvaty='ls'` |
-| розкрити коробку | `alias rozkryty='cat'` |
-| переставити коробку | `alias perestavyty='mv'` |
+| Підійти до стелажа | `alias pidiity='cd'` |
+| Змонтувати стелаж | `alias zmontuvaty='mkdir'` |
+| Зареєструвати коробку | `alias zareiestruvaty='touch'` |
+| Інспектувати стелаж | `alias inspektuvaty='ls'` |
+| Розкрити коробку | `alias rozkryty='cat'` |
+| Переставити коробку | `alias perestavyty='mv'` |
 
-Для дій «застрахувати» та «зважити» псевдоніми не створюються.
+Для дій «застрахувати стелаж» і «зважити коробку» псевдоніми не створювала, оскільки серед заданих команд немає відповідних операцій.
 
-### Відтворювана перевірка в Bash
+### Перевірка роботи
 
-Виконувати з каталогу OS-ControlWork-1. Усі приклади працюють у новому тимчасовому каталозі.
+Для перевірки потрібно відкрити Bash у папці з файлом `Sklad_aliases.sh` і підключити псевдоніми:
 
 ```bash
 source ./Sklad_aliases.sh
-shopt -s expand_aliases
-sandbox=$(mktemp -d)
-pidiity "$sandbox"
-test "$PWD" = "$sandbox" || exit 1
-zmontuvaty stelazh_1 stelazh_2
-test -d stelazh_1 && test -d stelazh_2 || exit 1
-zareiestruvaty stelazh_1/korobka.txt
-test -f stelazh_1/korobka.txt || exit 1
-# Допоміжна команда додає демонстраційний вміст для перевірки cat.
-printf '%s\n' 'Vmist korobky: knyhy' > stelazh_1/korobka.txt
-inspektuvaty stelazh_1
-test "$(inspektuvaty stelazh_1)" = 'korobka.txt' || exit 1
-rozkryty stelazh_1/korobka.txt
-test "$(rozkryty stelazh_1/korobka.txt)" = 'Vmist korobky: knyhy' || exit 1
-perestavyty stelazh_1/korobka.txt stelazh_2/korobka.txt
-test ! -e stelazh_1/korobka.txt && test -f stelazh_2/korobka.txt || exit 1
-test "$(rozkryty stelazh_2/korobka.txt)" = 'Vmist korobky: knyhy' || exit 1
-printf '%s\n' 'Усі шість псевдонімів перевірено успішно.'
 ```
 
+Далі створити окремий тимчасовий каталог для прикладу та перейти до нього:
 
+```bash
+mkdir -p /tmp
+pidiity "$(mktemp -d)"
+pwd
+```
+
+Команда `pwd` має показати шлях до тимчасового каталогу. Це перевірка псевдоніма `pidiity`.
+
+Створити два стелажі та зареєструвати коробку на першому:
+
+```bash
+zmontuvaty stelazh_1 stelazh_2
+ls
+zareiestruvaty stelazh_1/korobka.txt
+inspektuvaty stelazh_1
+```
+
+Після `ls` мають відобразитися два каталоги, а після `inspektuvaty` — файл `korobka.txt`.
+
+Додати до файла текст і переглянути його:
+
+```bash
+printf '%s\n' 'У коробці зберігаються книги.' > stelazh_1/korobka.txt
+rozkryty stelazh_1/korobka.txt
+```
+
+Команда `printf` потрібна лише для підготовки прикладу. Після `rozkryty` має відобразитися текст «У коробці зберігаються книги.».
+
+Переставити коробку на другий стелаж:
+
+```bash
+perestavyty stelazh_1/korobka.txt stelazh_2/
+inspektuvaty stelazh_1
+inspektuvaty stelazh_2
+```
+
+Перший стелаж має бути порожнім, а на другому має відобразитися `korobka.txt`.
+
+<img width="1226" height="784" alt="image" src="https://github.com/user-attachments/assets/0b77ce5d-26c4-4455-b453-e66e2eaf00bd" />
