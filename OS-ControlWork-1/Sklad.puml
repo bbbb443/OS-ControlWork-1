@@ -1,0 +1,41 @@
+@startuml
+hide circle
+skinparam classAttributeIconSize 0
+title Складська логістика — варіант 3
+class "Комірник" as Actor <<Actor>>
+class "Стелаж" as Aggregate <<Aggregate>>
+class "Коробка" as Part <<Part>>
+Actor "1" --> "0..*" Aggregate : застрахувати
+note on link
+  Bash: немає
+end note
+Actor "1" --> "0..*" Aggregate : підійти
+note on link
+  Bash: cd
+end note
+Actor "1" --> "0..*" Aggregate : змонтувати
+note on link
+  Bash: mkdir
+end note
+Actor "1" --> "0..*" Aggregate : інспектувати
+note on link
+  Bash: ls
+end note
+Actor "1" --> "0..*" Part : зареєструвати
+note on link
+  Bash: touch
+end note
+Actor "1" --> "0..*" Part : розкрити
+note on link
+  Bash: cat
+end note
+Actor "1" --> "0..*" Part : переставити
+note on link
+  Bash: mv
+end note
+Actor "1" --> "0..*" Part : зважити
+note on link
+  Bash: немає
+end note
+Aggregate "0..1" o-- "0..*" Part : містить
+@enduml
