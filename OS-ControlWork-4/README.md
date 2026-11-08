@@ -136,8 +136,4 @@ COMMIT TRANSACTION;
 
 Після ROLLBACK або COMMIT X-блокування знімаються автоматично. Тому окрему команду зняття блокувань я не додавала.
 
-## Джерела
 
-1. [Database System Concepts: Concurrency Control — degree-two consistency](https://codex.cs.yale.edu/avi/db-book/Previous-editions/db4/slide-dir/ch16-2.pdf).
-2. [Microsoft Learn: Table hints (Transact-SQL)](https://learn.microsoft.com/en-us/sql/t-sql/queries/hints-transact-sql-table).
-3. [Microsoft Learn: SET TRANSACTION ISOLATION LEVEL](https://learn.microsoft.com/en-us/sql/t-sql/statements/set-transaction-isolation-level-transact-sql).
